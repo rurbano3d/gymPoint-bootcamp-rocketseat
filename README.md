@@ -4,7 +4,12 @@
 <h3 align="center">
 Aplicação full stack utilizando Node.js, React.js e React Native (somente Android) - GoStack Bootcamp <a href="https://rocketseat.com.br" target="__blank">Rocketseat</a>
 </h3>
-
+<h4>
+<p>Sistema básico para gerenciamento de academias.</p>
+<p>Foi desenvolvida uma API REST com NODE.JS.</p>
+<p>Um sistema de gerenciamento com REACT JS, que cadastra alunos, planos e matrículas.</p>
+<p>Um aplicativo mobile com REACT NATIVE para alunos, que registra o checkin na academia e possibilita tirar dúvida com os professores.</p>
+</h4>
 
 ## Instruções
 ```bash
