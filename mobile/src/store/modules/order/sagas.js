@@ -14,7 +14,7 @@ export function* insertOrder({ payload }) {
       student_id: id,
       question,
     });
-    const orders = response.data;
+    const orders = response.data.help_orders;
 
     yield put(orderSuccess(orders));
 

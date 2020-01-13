@@ -15,6 +15,7 @@ export default function ListarPlanos() {
   const [plans, setPlans] = useState({});
   const [page, setPage] = useState('1');
   const [loading, setLoading] = useState(true);
+  const [totalResult, setTotalResult] = useState('');
   const dispatch = useDispatch();
 
   function handlePage(data) {
@@ -32,7 +33,8 @@ export default function ListarPlanos() {
       const response = await api.get('plans', {
         params: { page },
       });
-      setPlans(response.data);
+      setPlans(response.data.plans);
+      setTotalResult(response.data.totalResult);
       setLoading(false);
     }
     loadPlans();
@@ -94,7 +96,10 @@ export default function ListarPlanos() {
             </tbody>
           </table>
         )}
-        <Paginate pageCount={5} onPageChange={handlePage} />
+        <Paginate
+          pageCount={Math.ceil(totalResult / 20)}
+          onPageChange={handlePage}
+        />
       </Content>
     </div>
   );

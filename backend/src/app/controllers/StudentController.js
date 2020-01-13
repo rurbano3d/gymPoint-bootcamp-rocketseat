@@ -15,9 +15,14 @@ class StudentController {
       where: q ? { name: { [Op.substring]: q } } : null,
       limit: 20,
       offset: (page - 1) * 20,
-      order: [['id', 'ASC']],
+      order: [['id', 'DESC']],
     });
-    return res.json(students);
+
+    const totalResult = await Student.count();
+
+    // const students= {students}
+    const studentList = { totalResult, students };
+    return res.json(studentList);
   }
 
   async store(req, res) {

@@ -16,6 +16,7 @@ import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
 import DateInput from '~/components/DateInput';
 import CurrencyInput from '~/components/CurrencyInput';
+import AsyncSelect from '~/components/AsynSelect';
 
 import { formatDate } from '~/util';
 
@@ -33,13 +34,12 @@ const schema = Yup.object().shape({
 export default function FormMatriculas({ match }) {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.auth.loading);
-  const [students, setStudents] = useState([]);
+  const [student, setStudent] = useState([]);
   const [registration, setRegistration] = useState([]);
   const [plans, setPlans] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState(null);
   const [planSelected, setPlanSelected] = useState(null);
-  const [studentSelected, setStudentSelected] = useState(null);
   const [duration, setDuration] = useState('');
   const [price, setPrice] = useState('');
   const [priceTotal, setPriceTotal] = useState(null);
@@ -50,28 +50,23 @@ export default function FormMatriculas({ match }) {
     async function loadRegistration() {
       const response = await api.get(`registrations/${id}`);
       setRegistration(response.data);
+      const newStudent = {
+        id: response.data.student.id,
+        label: response.data.student.name,
+      };
+      setStudent(newStudent);
     }
     if (id) {
       loadRegistration();
     }
-  }, [id, registration.student]);
+  }, [id]);// eslint-disable-line
 
   useEffect(() => {
-    async function loadStudents() {
-      const response = await api.get('students');
-      const newStudents = response.data.map(s => ({
-        id: s.id,
-        title: s.name,
-      }));
-      setStudents(newStudents);
-    }
-
     async function loadPlans() {
       const response = await api.get('plans');
-      setPlans(response.data);
+      setPlans(response.data.plans);
     }
     loadPlans();
-    loadStudents();
   }, []);
   useEffect(() => {
     async function loadPlanSelected() {
@@ -124,14 +119,13 @@ export default function FormMatriculas({ match }) {
           initialData={registration}
         >
           <label>ALUNO</label>
-          <Select
-            name="student_id"
-            options={students}
-            placeholder="Buscar aluno"
-            onChange={e => setStudentSelected(e.target.value)}
-            value={studentSelected || registration.student_id}
-          />
 
+          <AsyncSelect
+            name="student_id"
+            query="students"
+            placeholder="Buscar aluno"
+            BdValue={student}
+          />
           <div>
             <div>
               <label>PLANO</label>

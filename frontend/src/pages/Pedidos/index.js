@@ -21,6 +21,7 @@ export default function Pedidos() {
   const [page, setPage] = useState('1');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [totalResult, setTotalResult] = useState('');
 
   function handlePage(data) {
     setPage(data.selected + 1);
@@ -52,7 +53,8 @@ export default function Pedidos() {
       const response = await api.get('help-orders', {
         params: { page },
       });
-      setOrders(response.data);
+      setOrders(response.data.help_orders);
+      setTotalResult(response.data.totalResult);
       setLoading(false);
     }
     loadOrders();
@@ -99,7 +101,10 @@ export default function Pedidos() {
             </tbody>
           </table>
         )}
-        <Paginate pageCount={5} onPageChange={handlePage} />
+        <Paginate
+          pageCount={Math.ceil(totalResult / 20)}
+          onPageChange={handlePage}
+        />
         <Modal
           title="PERGUNTA DO ALUNO"
           isShow={showModal}

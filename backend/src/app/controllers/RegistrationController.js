@@ -13,7 +13,21 @@ class RegistrationController {
     const { page = 1 } = req.query;
 
     if (req.params.id) {
-      const enroll = await Registration.findByPk(req.params.id);
+      const enroll = await Registration.findOne({
+        where: { id: req.params.id },
+        include: [
+          {
+            model: Student,
+            as: 'student',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: Plan,
+            as: 'plan',
+            attributes: ['id', 'title', 'duration', 'price'],
+          },
+        ],
+      });
       return res.json(enroll);
     }
 
@@ -21,6 +35,7 @@ class RegistrationController {
       limit: 20,
       offset: (page - 1) * 20,
       attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
+      order: [['id', 'DESC']],
       include: [
         {
           model: Student,
@@ -34,7 +49,10 @@ class RegistrationController {
         },
       ],
     });
-    return res.json(registrations);
+    const totalResult = await Registration.count();
+    const registrationsList = { totalResult, registrations };
+
+    return res.json(registrationsList);
   }
 
   async store(req, res) {

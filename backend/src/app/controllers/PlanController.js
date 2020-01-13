@@ -14,7 +14,11 @@ class PlanController {
       limit: 20,
       offset: (page - 1) * 20,
     });
-    return res.json(plans);
+
+    const totalResult = await Plan.count();
+    const plansList = { totalResult, plans };
+
+    return res.json(plansList);
   }
 
   async store(req, res) {

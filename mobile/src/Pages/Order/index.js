@@ -33,7 +33,11 @@ function Order({ navigation, isFocused }) {
     });
     setRefresh(false);
     setPage(page);
-    setOrders(page >= 2 ? [...orders, ...response.data] : response.data);
+    setOrders(
+      page >= 2
+        ? [...orders, ...response.data.help_orders]
+        : response.data.help_orders
+    );
   }
 
   useEffect(() => {

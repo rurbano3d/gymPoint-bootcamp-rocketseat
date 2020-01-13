@@ -20,7 +20,10 @@ class Help_orderController {
         },
       ],
     });
-    return res.json(help_orders);
+    const totalResult = await Help_order.count({ where: { answer: null } });
+    const help_ordersList = { totalResult, help_orders };
+
+    return res.json(help_ordersList);
   }
 
   async update(req, res) {

@@ -16,6 +16,7 @@ export default function ListarAlunos() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState('1');
   const [loading, setLoading] = useState(true);
+  const [totalResult, setTotalResult] = useState('');
   const dispatch = useDispatch();
 
   async function handleSearch(e) {
@@ -33,13 +34,13 @@ export default function ListarAlunos() {
     });
   }
 
-  console.tron.log(page);
   useEffect(() => {
     async function loadStudents() {
       const response = await api.get('students', {
         params: { q: search, page },
       });
-      setStudents(response.data);
+      setStudents(response.data.students);
+      setTotalResult(response.data.totalResult);
       setLoading(false);
     }
     loadStudents();
@@ -104,7 +105,10 @@ export default function ListarAlunos() {
             </tbody>
           </table>
         )}
-        <Paginate pageCount={5} onPageChange={handlePage} />
+        <Paginate
+          pageCount={Math.ceil(totalResult / 20)}
+          onPageChange={handlePage}
+        />
       </Content>
     </div>
   );

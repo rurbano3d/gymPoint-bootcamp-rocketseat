@@ -7,8 +7,8 @@ class Help_orderController {
     const { page = 1 } = req.query;
     const help_orders = await Help_order.findAll({
       where: { student_id: req.params.student_id },
-      limit: 5,
-      offset: (page - 1) * 5,
+      limit: 20,
+      offset: (page - 1) * 20,
       order: [['id', 'desc']],
       include: [
         {
@@ -18,7 +18,12 @@ class Help_orderController {
         },
       ],
     });
-    return res.json(help_orders);
+    const totalResult = await Help_order.count({
+      where: { student_id: req.params.student_id },
+    });
+    const help_ordersList = { totalResult, help_orders };
+
+    return res.json(help_ordersList);
   }
 
   async store(req, res) {

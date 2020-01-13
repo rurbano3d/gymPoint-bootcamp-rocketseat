@@ -25,6 +25,9 @@ export default createGlobalStyle`
   a{
     text-decoration:none;
   }
+  a:hover{
+    text-decoration:none;
+  }
   ul{
     list-style:none;
   }
